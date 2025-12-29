@@ -4,13 +4,11 @@ import completeImage from '../assets/quiz-complete.png';
 import Question from './Question.jsx';
 
 export default function Quiz() {
-  const [answerState, setAnswerState] = useState('');
   const [userAnswer, setUserAnswer] = useState([]);
 
   const timersRef = useRef([]);
 
-  const activeQuestionIndex =
-    answerState === '' ? userAnswer.length : userAnswer.length - 1;
+  const activeQuestionIndex = userAnswer.length;
   const quizIsCompleted = userAnswer.length === questions.length;
 
   useEffect(() => {
@@ -29,27 +27,9 @@ export default function Quiz() {
     timersRef.current.push(t);
   }, []);
 
-  const handleSelectAnswer = useCallback(
-    (selectedAnswer) => {
-      setAnswerState('answered');
-      setUserAnswer((prevAnswer) => [...prevAnswer, selectedAnswer]);
-
-      const t1 = setTimeout(() => {
-        if (selectedAnswer === questions[activeQuestionIndex].answers[0]) {
-          setAnswerState('correct');
-        } else {
-          setAnswerState('incorrect');
-        }
-        const t2 = setTimeout(() => {
-          setAnswerState('');
-        }, 900); // short pause showing correct/incorrect
-        timersRef.current.push(t2);
-      }, 300); // brief pause before showing correct/incorrect
-
-      timersRef.current.push(t1);
-    },
-    [activeQuestionIndex]
-  );
+  const handleSelectAnswer = useCallback((selectedAnswer) => {
+    setUserAnswer((prevAnswer) => [...prevAnswer, selectedAnswer]);
+  }, []);
 
   if (quizIsCompleted) {
     return (
@@ -64,11 +44,8 @@ export default function Quiz() {
     <div id='quiz'>
       <Question
         key={activeQuestionIndex}
+        index={activeQuestionIndex}
         onSelectAnswer={handleSelectAnswer}
-        questionText={questions[activeQuestionIndex]?.text}
-        answers={[...questions[activeQuestionIndex]?.answers]}
-        answerState={answerState}
-        selectedAnswer={userAnswer[userAnswer.length - 1]}
         handleSkipAnswer={handleSkipAnswer}
       />
     </div>

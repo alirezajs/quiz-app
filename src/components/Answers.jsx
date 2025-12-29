@@ -18,15 +18,17 @@ export default function Answers({
       {shuffledAnswers.current.map((answer, index) => {
         const isSelected = selectedAnswer === answer;
         let cssClass = '';
-        if (answerState === 'answered' && isSelected) {
-          cssClass = 'wrong';
-        }
-        if ((answerState === 'correct' || answerState === 'incorrect') && isSelected) {
+
+        if ((answerState === 'correct' || answerState === 'wrong') && isSelected) {
           cssClass = answerState;
         }
         return (
           <li key={index} className='answer'>
-            <button className={cssClass} onClick={() => onSelectAnswer(answer, index)}>
+            <button
+              className={cssClass}
+              onClick={() => onSelectAnswer(answer, index)}
+              disabled={answerState !== ''}
+            >
               {answer}
             </button>
           </li>
