@@ -19,12 +19,7 @@ export default function Quiz() {
   }, []);
 
   const handleSkipAnswer = useCallback(() => {
-    setAnswerState('answered');
     setUserAnswer((prev) => [...prev, null]);
-    const t = setTimeout(() => {
-      setAnswerState('');
-    }, 700);
-    timersRef.current.push(t);
   }, []);
 
   const handleSelectAnswer = useCallback((selectedAnswer) => {
